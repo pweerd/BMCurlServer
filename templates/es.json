@@ -1,0 +1,52 @@
+{
+    "bool": {
+        "pretty": true,
+        "template_json": {
+            "bool": {
+                "filter": [],
+                "must": [],
+                "must_not": [],
+                "should": []
+            }
+        }
+    },
+
+    "sort": {
+        "template_json": {"sort":"FIELD"}
+    },
+    "sort_arr": {
+        "template_json": {"sort":[]}
+    },
+    "sort_fld": {
+        "template_json": {"FIELD" : {"order" : "asc", "mode" : "avg"}}
+    },
+    "term": {
+        "template_json": {"term":{"FIELD": "value"}}
+    },
+    "term_pretty": {
+        "pretty": true,
+        "template_json": {"term":{"FIELD": "value"}}
+    },
+    "term-ex": {
+        "template_json": {"term":{"FIELD": {"value": "value", "boost": 1.0}}}
+    },
+    "exist": {
+        "template_json": {"exists":{"field": "FIELD"}}
+    },
+    "aggs": {
+        "pretty": true,
+        "template_json": {"aggs":{}}
+    },
+    "agg_terms": {
+        "pretty": true,
+        "template_json": {
+           "NAME": {
+              "terms": {
+                "field": "FIELD",
+                "size": 10,
+                "show_term_doc_count_error": true
+              }
+           }
+        }
+    }
+}

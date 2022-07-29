@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>nl.bitmanager.webcurl</groupId>
+   <artifactId>BMCurlServer</artifactId>
+   <name>BMCurlServer</name>
+   <description>BMCurlServer: Httpserver that exposes a curl helper</description>
+   <packaging>jar</packaging>
+   <version>1.0.2022.0725</version>
+   <organization>
+      <name>De Bitmanager</name>
+      <url>https://bitmanager.nl</url>
+   </organization>
+
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   </properties>
+
+   <build>
+      <finalName>BMCurlServer</finalName>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+            <configuration>
+               <source>1.8</source>
+               <target>1.8</target>
+            </configuration>
+            <!--
+            <executions>
+                <execution>
+                  <id>log4j-plugin-processor</id>
+                  <goals>
+                    <goal>compile</goal>
+                  </goals>
+                  <phase>process-classes</phase>
+                  <configuration>
+                    <proc>only</proc>
+                    <annotationProcessors>
+                      <annotationProcessor>org.apache.logging.log4j.core.config.plugins.processor.PluginProcessor</annotationProcessor>
+                    </annotationProcessors>
+                  </configuration>
+                </execution>
+            </executions>
+            -->
+         </plugin>
+
+         <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.1.2</version>
+            <executions>
+               <execution>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>copy-dependencies</goal>
+                  </goals>
+                  <configuration>
+                     <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                     <excludeArtifactIds>main</excludeArtifactIds>
+                     <includeScope>runtime</includeScope>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.1.2</version>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <packageName>nl.bitmanager.bmCurlServer</packageName>
+                     <mainClass>nl.bitmanager.webcurl.Main</mainClass>
+                     <addClasspath>true</addClasspath>
+                     <classpathPrefix>lib/</classpathPrefix>
+                  </manifest>
+                  <manifestEntries>
+                     <Created-By>De Bitmanager</Created-By>
+                  </manifestEntries>
+               </archive>
+            </configuration>
+         </plugin>
+         <!--
+         <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.3.0</version>
+            <configuration>
+               <appendAssemblyId>false</appendAssemblyId>
+               <descriptors>
+                  <descriptor>assembly.xml</descriptor>
+               </descriptors>
+            </configuration>
+            <executions>
+               <execution>
+                  <id>make-assembly</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>single</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+         -->
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>attach-sources</id>
+                  <goals>
+                    <goal>jar</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+
+   <dependencies>
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <version>4.12</version>
+         <scope>test</scope>
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/org.nanohttpd/nanohttpd -->
+      <dependency>
+          <groupId>org.nanohttpd</groupId>
+          <artifactId>nanohttpd</artifactId>
+          <version>2.3.1</version>
+      </dependency>
+
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-core</artifactId>
+          <version>2.13.0</version>
+      </dependency>
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+          <version>2.13.0</version>
+      </dependency>
+
+      <dependency>
+         <groupId>ch.qos.logback</groupId>
+         <artifactId>logback-core</artifactId>
+         <version>1.2.10</version>
+      </dependency>
+      <dependency>
+         <groupId>ch.qos.logback</groupId>
+         <artifactId>logback-classic</artifactId>
+         <version>1.2.10</version>
+      </dependency>
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-api</artifactId>
+         <version>1.7.36</version>
+      </dependency>
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>jul-to-slf4j</artifactId>
+         <version>1.7.36</version>
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+      <dependency>
+          <groupId>com.squareup.okhttp3</groupId>
+          <artifactId>okhttp</artifactId>
+          <version>3.14.9</version>
+      </dependency>
+   </dependencies>
+</project>

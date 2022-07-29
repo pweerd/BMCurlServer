@@ -1,0 +1,17 @@
+**/target/
+**/.settings/
+**/service/
+**/.vs/
+**/obj/
+.project
+.classpath
+settings.xml
+
+**/logs/
+**/storage/
+**/new/
+*.disabled
+*.old
+*.tmp
+*.bak
+*.ini

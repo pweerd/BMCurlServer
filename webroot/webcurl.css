@@ -1,0 +1,254 @@
+/*
+ * Copyright 2022, De Bitmanager
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+body {
+   margin: 0;
+   overflow: hidden;
+}
+
+.pull-right-btn {
+   float: right;
+   margin-right: 5px;
+}
+
+.pull-right-btn:first-of-type {
+   margin-right: 0;
+}
+
+#es_method {
+   width: 100px;
+}
+
+#editor_actions {
+   position: absolute;
+   top: 47px;
+   right: 100%;
+   margin-right: -481px;
+   z-index: 100;
+}
+
+#editor_actions > .btn-group > a {
+   padding: 2px 4px;
+}
+
+#editor_actions > .btn-group > a:hover {
+   padding: 2px 4px;
+   text-decoration: none;
+}
+
+#request_wrench {
+   color: rgb(51, 51, 51);
+}
+
+#send {
+   color: rgb(112, 186, 86);
+}
+
+.editor_position {
+   position: absolute;
+   top: 50px;
+   bottom: 0;
+   left: 0;
+   width: 484px;
+}
+
+.overlay {
+   background-color: #000;
+   opacity: 0.5;
+   z-index: 100;
+}
+
+#output {
+   position: absolute;
+   top: 50px;
+   bottom: 0;
+   left: 484px;
+   right: 0;
+   min-width: 700px;
+}
+
+#autocomplete {
+   visibility: hidden;
+   position: absolute;
+   z-index: 1000;
+   margin-top: 22px;
+   /*font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;*/
+   /*font-size: 12px;*/
+   /*max-height: 100px;*/
+   /*overflow-y: auto;*/
+   /* prevent horizontal scrollbar */
+   /*overflow-x: hidden;*/
+}
+
+.ui-menu {
+   background-color: white;
+   border: 1px solid #CCC
+}
+
+.ui-state-active {
+   color: white;
+   background-color: #08C;
+   margin: auto !important;
+}
+.ui-state-focus {
+   color: white;
+   background-color: #08C;
+   margin: auto !important;
+}
+
+.ui-state-focus>a {
+   color: white;
+   background-color: #08C;
+   margin: auto !important;
+}
+.ui-state-active>a {
+   color: white;
+   background-color: #08C;
+   margin: auto !important;
+}
+
+#example_editor_container {
+   width: 100%;
+   height: 13em;
+   margin: 10px 0;
+   position: relative;
+   overflow:hidden;
+}
+
+
+.icon-chevron-right {
+   position: absolute;
+   right: 10px;
+   margin-top: 2px;
+   margin-right: -6px;
+   opacity: .25;
+}
+
+
+.ui-autocomplete {
+   z-index: 400 !important;
+}
+
+.out_of_screen {
+   width: 1px;
+   height: 1px;
+   overflow: hidden;
+   margin-left: -1000px;
+}
+
+.ace_url {
+   color: #0088cc;
+}
+
+.ace_url.ace_param {
+   color: rgb(49, 132, 149);
+}
+
+.ace_url.ace_value {
+   color: rgb(3, 106, 7);
+}
+
+.ace_method {
+   color: rgb(197, 6, 11);
+}
+
+.ace_snippet-marker {
+   box-sizing: border-box;
+   background: rgba(194, 193, 208, 0.20);
+   /*border: 1px dotted rgba(211, 208, 235, 0.62); */
+   position: absolute;
+   width: 100% !important;
+}
+
+.ace_snippet-marker.ace_start {
+   border-top: dotted 1px rgba(194, 193, 208, 0.80);
+}
+
+.ace_snippet-marker.ace_start + .ace_snippet-marker {
+   border-bottom: dotted 1px rgba(194, 193, 208, 0.80);
+}
+
+.ui-resizable-e {
+   cursor: ew-resize;
+   width: 10px;
+   right: -5px;
+   top: 0;
+   bottom: 0;
+   background-color: transparent;
+   position: absolute;
+   z-index: 50 !important;
+}
+
+.ui-resizable-e:hover {
+   background-color: rgba(194, 193, 208, 0.80);
+}
+
+.ui-resizable-e.active {
+   background-color: rgba(194, 193, 208, 100);
+}
+
+.select-editable {
+   position: relative;
+   background-color: white;
+}
+
+.select-editable select {
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   border: none;
+   width: 100%;
+   margin: 0;
+}
+
+.select-editable input {
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   width: 100%;
+   padding: 1px;
+   font-size: 12px;
+   border: none;
+}
+
+.select-editable select:focus, .select-editable input:focus {
+   outline: none;
+}
+
+.navbar .textlbl {
+   display: block;
+   float: left;
+   padding: 10px 8px 10px 20px;
+   margin-left: 0px;
+   font-size: 18px;
+   font-weight: 200;
+   color: #777;
+}
+.navbar .textlbl.first-textlbl {
+   margin-left: -20px;
+}
+
+.forward_backward {
+   font-size:x-large;
+}
+#backward_btn {
+   margin-left: 20px !important;
+}
+#forward_btn {
+   margin-left: 5px !important;
+}
+.navbar-form label {
+   margin-left: 5px;
+}

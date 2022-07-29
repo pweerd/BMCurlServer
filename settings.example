@@ -1,0 +1,74 @@
+<root debug="false">
+   <server port="16000" />
+
+   <!--
+   Storage settings.
+   Savesets (the contentof the editor-panel + list of servers) are immediately saved(cached) in memory of the local server.
+   The server will check every lazy_interval for dirty savesets and writes them to disk.
+   When the server is stopped (CTRL-C), dirty savesets are always written to disk
+     -->
+   <storage lazy_interval="30m" />
+
+   <!--
+   Resolvers are used to map hostnames that you use to a real dns-name.
+   A resolve is basically a regualar expression with a replacer
+   - suffix: a suffix is appended
+   - value:  the complete hostname is replaced
+   - expr:   the hostname is replaced by a regex expr with $ variables.
+   Resolvers are executed in order of appearance. Processing stops as soon as a resolver
+   resolved a hostname into a name that is DNS-resolvable.
+   
+   A resolver can contains multuple replacer nodes.
+   
+   Resolvers are executed before endpoint selection. 
+     -->
+   <resolvers>
+      <resolve expr="^bm2$">
+         <replace suffix=".fritz.box" />
+      </resolve>
+      <resolve expr="^remotehost">
+         <replace expr="localhost" />
+      </resolve>
+      <resolve expr="^(rem).*(hos).?">
+         <replace expr="local$2t" />
+      </resolve>
+   </resolvers>
+
+   <!--
+   Collection of endpoints.
+   When a request comes in, the endpoint is selected based on the requested url
+   by using the regualar expressions in the selector-node.
+   End points are evaluated in order of appearance.
+   The select-nodes are operating on the reolved url.
+   
+   In this example, templates are loaded from templates/es.json.
+   The mapper is a plugin that registered itself under the name 'es'.
+   The response plugins are selected if their name starts with 'es-'. (if you omit response_plugins, all plugins are selected)
+     -->
+   <endpoints timeout="5m" connect_timeout="1s">
+      <endpoint name="ep2" ignore_certificate_errors="true" autocomplete="es" templates="es" headers="myheaders" response_plugins="^es-">
+         <proxy addr="192.168.178.2" port="3128" type="http"/>
+         <selectors>
+            <select expr="some_site_that_needs_proxy" />
+         </selectors>
+      </endpoint>
+
+      <endpoint name="default" autocomplete="es" templates="es" >
+         <selectors>
+            <select expr="." />
+         </selectors>
+      </endpoint>
+   </endpoints>
+
+   <!--
+   Collection of header-sets, to be sent with a request.
+   Selected by an endpoint with the headers= parameter
+     -->
+   <header_collections>
+      <header_collection name="myheaders" >
+         <header key="Connection" value="Keep-Alive" />
+         <header key="X-myheader" value="webcurl" />
+      </header_collection>
+   </header_collections>
+</root>
+
