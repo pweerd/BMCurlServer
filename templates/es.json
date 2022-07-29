@@ -11,9 +11,6 @@
         }
     },
 
-    "sort": {
-        "template_json": {"sort":"FIELD"}
-    },
     "sort_arr": {
         "template_json": {"sort":[]}
     },
@@ -23,13 +20,35 @@
     "term": {
         "template_json": {"term":{"FIELD": "value"}}
     },
-    "term_pretty": {
-        "pretty": true,
-        "template_json": {"term":{"FIELD": "value"}}
-    },
     "term-ex": {
         "template_json": {"term":{"FIELD": {"value": "value", "boost": 1.0}}}
     },
+    "match": {
+        "template_json": {"match":{"FIELD": "value"}}
+    },
+   "match-ex": {
+      "pretty": true,
+      "template_json": {
+         "match": {
+            "FIELD": {
+               "query": "value",
+               "boost": 1.0,
+               "operator": "and",
+               "fuzziness": "AUTO",
+               "lenient": true
+            }
+         }
+      }
+   },
+
+    "_source": {
+        "template_json": {"_source": ["obj1.*"]}
+    },
+    "_source-ex": {
+        "pretty": true,
+        "template_json": {"_source": { "includes": [ "obj1.*", "obj2.*" ], "excludes": [ "*.description" ] }}
+    },
+
     "exist": {
         "template_json": {"exists":{"field": "FIELD"}}
     },

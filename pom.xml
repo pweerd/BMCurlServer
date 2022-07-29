@@ -83,28 +83,23 @@
                </archive>
             </configuration>
          </plugin>
-         <!--
          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
             <version>3.3.0</version>
             <configuration>
-               <appendAssemblyId>false</appendAssemblyId>
-               <descriptors>
-                  <descriptor>assembly.xml</descriptor>
-               </descriptors>
             </configuration>
             <executions>
-               <execution>
-                  <id>make-assembly</id>
-                  <phase>package</phase>
-                  <goals>
-                     <goal>single</goal>
-                  </goals>
-               </execution>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                </execution>
             </executions>
          </plugin>
-         -->
 
+         <!--
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
@@ -117,6 +112,7 @@
                </execution>
             </executions>
          </plugin>
+         -->
       </plugins>
    </build>
 
