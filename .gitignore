@@ -1,14 +1,14 @@
-**/target/
-**/.settings/
-**/service/
-**/.vs/
-**/obj/
+target/
+.settings/
+service/
+.vs/
+obj/
 .project
 .classpath
 settings.xml
 
-**/logs/
-**/storage/
+logs/
+storage/
 **/new/
 *.disabled
 *.old
