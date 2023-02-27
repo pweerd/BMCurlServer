@@ -50,6 +50,26 @@
       if (!Array.isArray(hits)) return data;
 
       let summ = [];
+      let hdr = [];
+      hdr.push ("Returned hits: ");
+      hdr.push (hits.length);
+      hdr.push (" / ");
+      let totalHits = data.hits.total;
+      if (typeof (totalHits) !== 'object') {
+        hdr.push (totalHits);
+        hdr.push ("(eq)");
+      } else {
+        hdr.push (totalHits.value);
+        hdr.push ("(");
+        hdr.push (totalHits.relation);
+        hdr.push (")");
+      }
+      hdr.push (", http status: ");
+      hdr.push (data.__call_status);
+      hdr.push (", call took: ");
+      hdr.push (data.__call_took);
+      hdr.push (" ms");
+      summ.push (hdr.join(''));
       for (let i = 0; i < hits.length; i++) summ.push(formatHit(hits[i]));
       if (summ.length === 0) return data;
 
