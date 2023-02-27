@@ -247,7 +247,7 @@ webcurl = (function () {
          catch (e) { console.log("Cannot parse response: ", e); }
 
          let tookStr = xhr.getResponseHeader('X_took');
-         if (tookStr) took = 0 + tookStr;
+         if (tookStr) took = parseInt(tookStr);
 
          //Insert call time and status. Don't overwrite existing values
          if (null !== value && typeof (value) === 'object' && !Array.isArray(value)) {
