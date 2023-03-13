@@ -59,7 +59,7 @@
     * - empty
     * We always return an array, where indexnames are dedupped.
     * Also: in case of empty: we return all known indexes
-    */ 
+    */
    function _normalizeIndexes(indexes) {
       if (!indexes) return [];
 
@@ -190,50 +190,25 @@
       return m ? _getFields(m[2], m[3]) : [];
    }
 
-   function _getFieldNamesFromFieldMapping(field_name, field_mapping) {
-      if (field_mapping['enabled'] === false) return [];
 
+   function _getFieldNamesFromFieldMapping(names, fieldsObject, baseName) {
+      if (fieldsObject['enabled'] === false) return names;
 
-      function applyPathSettings(nested_field_names) {
-         let path_type = field_mapping['path'] || "full";
-         if (path_type === "full") {
-            return $.map(nested_field_names, function (f) {
-               return field_name + "." + f;
-            });
-         }
-         return nested_field_names;
+      for (const name in fieldsObject) {
+         let fullName = baseName ? baseName + '.' + name : name;
+         names[fullName] = 1;
+
+         let sub = fieldsObject[name];
+         if (sub.properties) _getFieldNamesFromFieldMapping(names, sub.properties, fullName);
+         else if (sub.fields) _getFieldNamesFromFieldMapping(names, sub.fields, fullName);
       }
-
-      let nested_fields;
-      if (field_mapping["properties"]) {
-         // derived object type
-         return applyPathSettings(_getFieldNamesFromTypeMapping(field_mapping));
-      }
-
-      if (field_mapping['type'] === 'multi_field') {
-         nested_fields = $.map(field_mapping['fields'], function (field_mapping, field_name) {
-            return _getFieldNamesFromFieldMapping(field_name, field_mapping);
-         });
-
-         return applyPathSettings(nested_fields);
-      }
-
-      if (field_mapping["index_name"]) return [field_mapping["index_name"]];
-
-      return [field_name];
+      return names;
    }
 
    function _getFieldNamesFromTypeMapping(type_mapping) {
       if (!type_mapping || !type_mapping['properties']) return [];
-      let field_list =
-         $.map(type_mapping['properties'], function (field_mapping, field_name) {
-            return _getFieldNamesFromFieldMapping(field_name, field_mapping);
-         });
-
-      // deduping
-      let fields = {};
-      for (let i = 0; i < field_list.length; i++) fields[field_list[i]] = null;
-      return Object.keys(fields).sort();
+      let names = _getFieldNamesFromFieldMapping({}, type_mapping['properties']);
+      return Object.keys(names).sort();
    }
 
    function _loadMappings(mappings) {
