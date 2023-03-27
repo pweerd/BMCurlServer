@@ -67,6 +67,10 @@ public class AjaxHelper {
         int bodyLen = bytes==null? 0: bytes.length;
         switch (method) {
             case GET: break;
+            case DELETE:
+                logger.info("Delete {} bytes", bodyLen); 
+                bldr.delete(body);
+                break;
             case POST: 
                 logger.info("Post {} bytes", bodyLen); 
                 bldr.addHeader("Content-Length", Integer.toString(bodyLen));

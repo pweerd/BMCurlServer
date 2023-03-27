@@ -18,7 +18,6 @@ package nl.bitmanager.webcurl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -159,12 +158,8 @@ public class HttpServer extends NanoHTTPD  {
     }
 
     private static byte[] readBody (IHTTPSession session) throws IOException {
-        InputStream strm = session.getInputStream();
         int bodySize = (int)((HTTPSession)session).getBodySize();
-        if (bodySize==0)
-            return strm.readAllBytes();
-        else
-            return strm.readNBytes(bodySize);
+        return (bodySize==0) ? null : session.getInputStream().readNBytes(bodySize);
     }
 
     private Response handleAjax(Settings settings, IHTTPSession session) throws IOException {
@@ -178,7 +173,7 @@ public class HttpServer extends NanoHTTPD  {
             bytes = readBody(session);
         
         long t0 = System.currentTimeMillis();
-        AjaxResult ajaxResult = AjaxHelper.execute(settings, session.getMethod(), url, bytes);
+        AjaxResult ajaxResult = AjaxHelper.execute(settings, m, url, bytes);
         bytes = ajaxResult.result;
         logger.debug(Invariant.format("-- ret code=%d, length=%d", ajaxResult.status.getRequestStatus(), bytes.length));
         Response resp = newFixedLengthResponse(ajaxResult.status, "application/json", new ByteArrayInputStream(bytes), bytes.length);
