@@ -59,8 +59,8 @@
          type: "GET",
          dataType: "json",
          complete: function (xhr, status) {
+            _activeSaveSet = null;
             let value;
-            let ok;
             if (xhr.status === 200) {
                try {
                   value = JSON.parse(xhr.responseText);
@@ -69,11 +69,13 @@
                if (typeof (value) === 'object') {
                   _saveSetNames = value.names;
                   if (value.saveset) _activeSaveSet = value.saveset;
-                  ok=true;
                }
             }
+            if (_activeSaveSet === null) {
+               if (!ok) alert("Fetch initial state failed: " + xhr.responseText);
+               _activeSaveSet = createSaveSet();
+            }
             notifyChange('init');
-            if (!ok) alert("Fetch initial state failed: " + xhr.responseText);
          }
       });
    }
@@ -152,11 +154,11 @@
       //Save current saveset
       if (_activeSaveSet) postSaveSet(_activeSaveSet.name, _activeSaveSet);
 
-      //Copy the set from the existing one
+      //Create a new set by copying the servers from the old set, but with initial editor content
       _activeSaveSet = {
          name: saveset,
          servers: _activeSaveSet.servers.slice(),
-         editorContent: _activeSaveSet.editorContent
+         editorContent: _initialContent
       };
 
       //Fetch, and if not not found: save current saveset as the new one
