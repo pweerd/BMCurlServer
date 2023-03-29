@@ -22,6 +22,7 @@
 
    const _api = [
       "_search",
+      "_analyze",
       "_template",
       "_aliases",
       "_stats",
