@@ -66,7 +66,7 @@
 
    function getAutoCompleteValueFromToken(token) {
       let ret = _getAutoCompleteValueFromToken(token);
-      console.log('GetACValue(', token, '): ', ret);
+      console.log('GetACValue(', token.type, ':', token.value, '): ', ret);
       return ret;
    }
    function _getAutoCompleteValueFromToken(token) {
@@ -104,10 +104,11 @@
       $item.addClass("ui-state-active");
       return true;
    }
-   function menuSelectActive() {
+   function menuSelectActive(useFirstIfNoActive) {
       let $li = ACTIVE_MENU.find("li");
       let $item = ACTIVE_MENU.find(".ui-state-active");
       if ($item.length === 0) {
+         if (!useFirstIfNoActive) return false;
          $item = $($li[0]);
       }
       let idx = $item.data("term_id");
@@ -140,7 +141,7 @@
       {
          name: "indent",
          exec: function (editor) {
-            menuSelectActive();
+            menuSelectActive(true);
             return true;
          },
          bindKey: "Tab"
@@ -180,6 +181,10 @@
       let context = ACTIVE_CONTEXT;
       let token = editor.getTokenUnderCursor();
       let term = getAutoCompleteValueFromToken(token);
+      if (!term && !context.inBody) {
+         resetAutoComplete(editor);
+         return false;
+      }
       let lcTerm = term.toLowerCase();
       let possible_terms = context.autoCompleteTerms;
       console.log("Updating autocomplete for ", term, ", terms=", possible_terms);
@@ -610,19 +615,20 @@
       return !acText || acText.match(/^[\s_\-,\$A-Za-z0-9]+$/);
    }
 
+   function _length(x) {
+      return x ? x.length : 0;
+   }
    function evaluateCurrentTokenAfterAChange() {
       let pos = webcurl.editor.getCursorPosition();
       let session = webcurl.editor.getSession();
       let currentToken = session.getTokenAt(pos.row, pos.column);
-      console.log("Evaluating current token: " + (currentToken || {}).value +
-         " last examined: " + ((ACTIVE_CONTEXT || {}).tokenUnderCursor || {}).value);
+      let value = currentToken ? currentToken.value + '' : '';
+      console.log("Evaluating current token: ", value, _length(value),
+         " last examined: ", ((ACTIVE_CONTEXT || {}).tokenUnderCursor || {}).value);
 
-      if (!currentToken) {
-         if (pos.row === 0) {
-            resetAutoComplete();
-            return;
-         }
-         currentToken = { start: 0 }; // empty row
+      if (!currentToken || value.trim() !== value) {
+         resetAutoComplete();
+         return;
       }
 
       currentToken.row = pos.row; // extend token with row. Ace doesn't supply it by default
