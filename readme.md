@@ -17,6 +17,7 @@ WebCurl is an interface to play with Json API's. It is much like the Kibana comm
   - etc
 
 Webcurl is hosted by a local java webserver and runs in every recent browser.
+You will need at least Java 8 to run it.
 
 
 
@@ -53,6 +54,7 @@ These plugins can be used to
 - autocomplete suppliers for autocomplete on url's, fields or index names.
 
 Also you can specify/create templates. Templates are json-pieces that can be injected in the command-body. Templates and autocomplete suppliers are specific for on endpoint (server).
+If you want to override parts of a supplied template (lets say 'es'), it is handy to supply your own template like 'my_es_templates.json' and specify both in the endpoint: templates="my_es_templates,es".
 
 For customizations of the settings, like the port where the server is running, see the settings.xml file.
 
@@ -76,3 +78,13 @@ The web application is no longer bound to ElasticSearch. It can be used for most
 ## Credits
 
 Many credits go to Boaz Leskes, the creator of Sense. He created this very easy interface to Elasticsearch. It gave me a jump start when learning ElasticSearch. And again when I was creating WebCurl.
+
+
+
+## Compile
+
+To compile the java part, you must install [maven](https://maven.apache.org/). Once maven is installed, you can open a terminal window and
+
+- cd to your webcurl install folder
+- run: mvn package
+  if the command mvn is not found, you have to put the maven bin dir in your path, or replace the mvn command with the actual location.
