@@ -174,3 +174,46 @@ The settings.xml contains the settings for the webcurl server.
 Webcurl uses onchange notifications for the settings.xml as well as for the templates. If there is a change, the next request will automatically force a reload of the server settings.
 
 Note however that some of the settings are propagated to the browser. So you might need to refresh the browser as well.
+
+
+
+### Customize templates
+
+Templates are basically json objects, stored in the template folder.
+Such a json file contains multiple templates, keyed by the name.
+If an endpoint specifies multiple template collections, the template collections are combined into one, where an earlier template will take precedence.
+
+Example: if you specify "my_template,es", and both collections contained a template for a 'match' query, the template 'match' from 'my_template' is used. 
+
+In the settings.xml:
+
+```
+   <endpoint name="default" autocomplete="es" templates="my_template,es" >
+         <selectors>
+            <select expr="." />
+         </selectors>
+      </endpoint>
+   </endpoints>
+```
+
+For the rest, creating a template is pretty much self explaining if you look at a supplied template. The only thing worth mentioning is the pretty value. If this is supplied and true, the template will be pretty-formatted and then inserted. Otherwise the template is inserted as unformatted json.
+
+As an example a template-collection with 1 template (named 'agg_terms'):
+
+```
+ {   
+    "agg_terms": {
+        "pretty": true,
+        "template_json": {
+           "NAME": {
+              "terms": {
+                "field": "FIELD",
+                "size": 10,
+                "show_term_doc_count_error": true
+              }
+           }
+        }
+    }
+ }   
+```
+
