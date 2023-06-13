@@ -621,15 +621,17 @@
    function evaluateCurrentTokenAfterAChange() {
       let pos = webcurl.editor.getCursorPosition();
       let session = webcurl.editor.getSession();
+
+      //Early out if we are on a comment line. 
+      let currentLine = session.getLine(pos.row).trim();
+      if (currentLine.indexOf("#") === 0) return resetAutoComplete();
+
       let currentToken = session.getTokenAt(pos.row, pos.column);
       let value = currentToken ? currentToken.value + '' : '';
       console.log("Evaluating current token: ", value, _length(value),
          " last examined: ", ((ACTIVE_CONTEXT || {}).tokenUnderCursor || {}).value);
 
-      if (!currentToken || value.trim() !== value) {
-         resetAutoComplete();
-         return;
-      }
+      if (!currentToken || value.trim() !== value) return resetAutoComplete();
 
       currentToken.row = pos.row; // extend token with row. Ace doesn't supply it by default
 
