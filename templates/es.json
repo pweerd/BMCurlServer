@@ -1,31 +1,40 @@
 {
-    "bool": {
-        "pretty": true,
-        "template_json": {
-            "bool": {
-                "filter": [],
-                "must": [],
-                "must_not": [],
-                "should": []
-            }
-        }
-    },
+   "bool": {
+      "pretty": true,
+      "template_json": {
+         "bool": {
+            "filter": [],
+            "must": [],
+            "must_not": [],
+            "should": []
+         }
+      }
+   },
 
-    "sort_arr": {
-        "template_json": {"sort":[]}
-    },
-    "sort_fld": {
-        "template_json": {"FIELD" : {"order" : "asc", "mode" : "avg"}}
-    },
-    "term": {
-        "template_json": {"term":{"FIELD": "value"}}
-    },
-    "term-ex": {
-        "template_json": {"term":{"FIELD": {"value": "value", "boost": 1.0}}}
-    },
-    "match": {
-        "template_json": {"match":{"FIELD": "value"}}
-    },
+   "sort_fld": {
+      "template_json": {
+         "FIELD": {
+            "order": "asc",
+            "mode": "avg"
+         }
+      }
+   },
+   "term": {
+      "template_json": { "term": { "FIELD": "value" } }
+   },
+   "term-ex": {
+      "template_json": {
+         "term": {
+            "FIELD": {
+               "value": "value",
+               "boost": 1.0
+            }
+         }
+      }
+   },
+   "match": {
+      "template_json": { "match": { "FIELD": "value" } }
+   },
    "match-ex": {
       "pretty": true,
       "template_json": {
@@ -40,32 +49,56 @@
          }
       }
    },
+   "range": {
+      "pretty": true,
+      "template_json": {
+         "range": {
+            "FIELD": {
+               "gte": "now-1d/d",
+               "lt": "now/d",
+               "boost": 1.0
+            }
+         }
+      }
+   },
 
-    "_source": {
-        "template_json": {"_source": ["obj1.*"]}
-    },
-    "_source-ex": {
-        "pretty": true,
-        "template_json": {"_source": { "includes": [ "obj1.*", "obj2.*" ], "excludes": [ "*.description" ] }}
-    },
+   "body": {
+      "pretty": true,
+      "template_json": {
+         "track_total_hits": true,
+         "sort": [],
+         "query": { "match_all": {} },
+         "aggs": {}
+      }
+   },
 
-    "exist": {
-        "template_json": {"exists":{"field": "FIELD"}}
-    },
-    "aggs": {
-        "pretty": true,
-        "template_json": {"aggs":{}}
-    },
-    "agg_terms": {
-        "pretty": true,
-        "template_json": {
-           "NAME": {
-              "terms": {
-                "field": "FIELD",
-                "size": 10,
-                "show_term_doc_count_error": true
-              }
-           }
-        }
-    }
+   "_source": {
+      "template_json": { "_source": [ "obj1.*" ] }
+   },
+   "_source-ex": {
+      "pretty": true,
+      "template_json": {
+         "_source": {
+            "includes": [ "obj1.*", "obj2.*" ],
+            "excludes": [ "*.description" ]
+         }
+      }
+   },
+
+   "exist": {
+      "template_json": { "exists": { "field": "FIELD" } }
+   },
+
+   "agg_terms": {
+      "pretty": true,
+      "template_json": {
+         "NAME": {
+            "terms": {
+               "field": "FIELD",
+               "size": 10,
+               "show_term_doc_count_error": true
+            }
+         }
+      }
+   }
 }
