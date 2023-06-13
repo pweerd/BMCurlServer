@@ -71,7 +71,8 @@
       let line = (session.getLine(row) || "").trim();
       if (!line) return ROW_PARSE_MODE.BETWEEN_REQUESTS; // empty line waiting for a new req to start
 
-      if (line.indexOf("}", line.length - 1) >= 0) {
+      let ixEnd = line.indexOf("}", line.length - 1);
+      if (ixEnd === 0 || (ixEnd > 0 && line.indexOf("{")===0)) {
          // check for a multi doc request (must start a new json doc immediately after this one end.
          row++;
          if (row < session.getLength()) {
