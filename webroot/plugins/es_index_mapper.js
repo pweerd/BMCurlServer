@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 (function () {
-   let per_index_types = {};
-   let per_alias_indexes = {};
+   let _per_index_types = {};
+   let _per_alias_indexes = {};
    let _active = false;
    let _loaded = false;
    let _timer = undefined;
@@ -50,8 +50,8 @@
    function _deactivate() {
       _active = false;
       clearInterval(_timer);
-      per_index_types = {};
-      per_alias_indexes = {};
+      _per_index_types = {};
+      _per_alias_indexes = {};
    }
 
    /* Normalize indexes. At can be:
@@ -68,7 +68,7 @@
 
       let names = {};
       for (const index of indexes) {
-         let indexesFromAlias = per_alias_indexes[index];
+         let indexesFromAlias = _per_alias_indexes[index];
          if (!indexesFromAlias)
             names[index] = 1;
          else
@@ -86,14 +86,11 @@
     * In case of empty: we return all known types for this index
     */
    function _normalizeTypes(index, types) {
-      let indexTypes = per_index_types[index];
+      let indexTypes = _per_index_types[index];
       if (!indexTypes) return [];
 
       if (typeof types === "string") {
-         if (types.startsWith("_") && types !== "_doc")
-            types = undefined;
-         else
-            types = [types];
+         types = (types.startsWith("_") && types !== "_doc") ? undefined : [types];
       }
       return types ? types : Object.keys(indexTypes);
    }
@@ -105,8 +102,8 @@
       // get fields for indices and types. Both can be a list, a string or null (meaning all).
       let names = {};
       indices = _normalizeIndexes(indices);
-      for (const index of _normalizeIndexes(indices)) {
-         let typesFromIndex = per_index_types[index];
+      for (const index of indices) {
+         let typesFromIndex = _per_index_types[index];
          if (!typesFromIndex) continue;
 
          let typeNames = _normalizeTypes(index, types);
@@ -114,7 +111,7 @@
             _addNames(names, typesFromIndex[typeName]);
          }
       }
-      return Object.keys(names);
+      return Object.keys(names).sort();
    }
 
    function _addNames(names, dictOrArr) {
@@ -130,19 +127,19 @@
       if (!_loaded) return [];
       let types = {};
       for (const index of _normalizeIndexes(indices)) {
-         _addNames(types, per_index_types[index]);
+         _addNames(types, _per_index_types[index]);
       }
-      return Object.keys(types);
+      return Object.keys(types).sort();
    }
 
 
    function _getIndexes(include_aliases) {
-      let ret = Object.keys(per_index_types);
+      let ret = Object.keys(_per_index_types);
       if (typeof include_aliases === "undefined" ? true : include_aliases) {
-         for (const name in per_alias_indexes)
+         for (const name in _per_alias_indexes)
             ret.push(name);
       }
-      return ret;
+      return ret.sort();
    }
 
 
@@ -213,7 +210,7 @@
    }
 
    function _loadMappings(mappings) {
-      per_index_types = {};
+      _per_index_types = {};
       $.each(mappings, function (index, index_mapping) {
          //console.log("Handling index", index, index_mapping);
          let normalized_index_mappings = {};
@@ -228,27 +225,27 @@
                normalized_index_mappings[type_name] = _getFieldNamesFromTypeMapping(type_mapping);
             });
          }
-         per_index_types[index] = normalized_index_mappings;
+         _per_index_types[index] = normalized_index_mappings;
       });
 
-      console.log("LOADED mappings: ", per_index_types)
+      console.log("LOADED mappings: ", _per_index_types)
    }
 
    function _loadAliases(aliases) {
-      per_alias_indexes = {};
+      _per_alias_indexes = {};
       $.each(aliases, function (index, index_aliases) {
          $.each(index_aliases.aliases, function (alias) {
             if (alias === index) return; // alias which is identical to index means no index.
-            let cur_aliases = per_alias_indexes[alias];
+            let cur_aliases = _per_alias_indexes[alias];
             if (!cur_aliases) {
                cur_aliases = [];
-               per_alias_indexes[alias] = cur_aliases;
+               _per_alias_indexes[alias] = cur_aliases;
             }
             cur_aliases.push(index);
          });
       });
 
-      per_alias_indexes['_all'] = _getIndexes(false);
+      _per_alias_indexes['_all'] = _getIndexes(false);
    }
 
 
