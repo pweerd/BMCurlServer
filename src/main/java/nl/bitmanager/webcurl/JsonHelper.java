@@ -26,6 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class JsonHelper {
@@ -105,5 +106,14 @@ public class JsonHelper {
         ArrayNode ret = mapper.createArrayNode();
         ret.add(v);
         return ret;
+    }
+    
+    public static ObjectNode asObjectNode(JsonNode n) {
+    	if (n.getNodeType() != JsonNodeType.OBJECT) throw new RuntimeException("Expected json object, but got [" + n.getNodeType() + "].");
+    	return (ObjectNode)n;
+    }
+    public static ObjectNode readObject(JsonNode n, String k, ObjectNode def) {
+    	JsonNode x = asObjectNode(n).get(k);
+    	return x==null ? def : asObjectNode(x);
     }
 }
