@@ -22,6 +22,18 @@ If the request is executed, the saveset (see later) is saved. Since a saveset ho
 
 The native response might be changed by 1 or more response plugins. See later.
 
+If you want to send file bytes in a POST/PUT/DELETE command, it is possible to reference the filename in the body. WebCurl will intercept the reference, read the requested file and send the file-bytes as body instead. The syntax is like this:
+```
+{
+   "_file_body": {
+      "file": "some file",
+      "type": "some mimetype"
+   }
+}
+```
+For common files like images, the mime-type is internally known and you can omit the 'type'.
+
+
 
 
 ### Server types

@@ -16,11 +16,19 @@
 package nl.bitmanager.webcurl;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Method;
 import fi.iki.elonen.NanoHTTPD.Response.IStatus;
 import nl.bitmanager.core.Invariant;
@@ -63,8 +71,8 @@ public class AjaxHelper {
         
         Endpoint ep = settings.getEndpointFor(url);
         Request.Builder bldr = ep.createRequestBuilder(url);
-        RequestBody body = bytes == null ? null : RequestBody.create(jsonMediaType, bytes);
-        int bodyLen = bytes==null? 0: bytes.length;
+        RequestBody body = createRequestBody(bytes);
+        int bodyLen = body==null? 0: (int)body.contentLength();
         switch (method) {
             case GET: break;
             case DELETE:
@@ -101,6 +109,29 @@ public class AjaxHelper {
         try (Response response = client.newCall(request).execute()) {
             return new AjaxResult(ep, response);
         }
+    }
+
+    /**
+     * Transform the array of bytes into a RequestBody 
+     * Eventual convert a _file_body hash into an array of bytes by reading the supplied filename
+     */
+    private static RequestBody createRequestBody (byte[] body) throws IOException {
+    	if (body==null) return null;
+    	
+    	JsonNode bodyNode = JsonHelper.bytesToJsonNode(body);
+    	ObjectNode fileNode = JsonHelper.readObject(bodyNode, "_file_body", null);
+    	if (fileNode != null) {
+    		JsonNode fn = fileNode.get("file");
+    		if (fn != null) {
+    			Path p = Paths.get(fn.asText());
+    			
+        		byte[] fileBytes = Files.readAllBytes(p);
+        		JsonNode type = fileNode.get("type");
+        		String mimeType = type != null ? type.asText() : NanoHTTPD.getMimeTypeForFile(p.getFileName().toString());
+        		return RequestBody.create(MediaType.parse(mimeType), fileBytes);
+    		}
+    	}
+    	return RequestBody.create(jsonMediaType, body);
     }
     
     
