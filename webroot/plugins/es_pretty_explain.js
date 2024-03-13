@@ -48,13 +48,14 @@
       let desc = readTrimmedDescription(explain);
       let details = readDetails(explain);
 
-      if (details.length===1 && lvl===0) {
-         if (desc==="sum of") {
-            return _format(arr, 0, details[0]);
-         }
+      if (value === 1.0 && desc === "queryBoost") return;
+      if (details.length===1 && lvl===0 && desc==="sum of") {
+         return _format(arr, lvl, details[0]);
+      }
+      if (details.length===2 && desc==="min of" && details[1].description==="maxBoost") {
+         return _format(arr, lvl, details[0]);
       }
 
-      if (value === 1.0 && desc === "queryBoost") return;
       if (desc.startsWith("weight(") && desc.endsWith(") [PerFieldSimilarity], result of")) {
          desc = desc.substring(7, desc.length - 33);
          details = getSimilarityDetails(details);
